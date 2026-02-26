@@ -1,0 +1,4 @@
+# Place .sql or .sh files here to run automatically on first container initialisation.
+# Files are executed in alphabetical order by the MySQL Docker entrypoint.
+# This directory is tracked in git; the files you drop in here should also be
+# committed (schema seeds, etc.) unless they contain secrets.

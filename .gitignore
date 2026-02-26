@@ -1,0 +1,27 @@
+# ── Secrets ───────────────────────────────────────────────────────────────────
+.env
+
+# ── Database data (never commit actual data) ──────────────────────────────────
+data/
+mysql-data/
+
+# ── Backup dumps ──────────────────────────────────────────────────────────────
+# Individual dump files inside the tracked backups/ folder.
+backups/*.sql
+backups/*.sql.gz
+backups/*.sql.bz2
+
+# ── macOS ─────────────────────────────────────────────────────────────────────
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# ── Editors ───────────────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+*.log

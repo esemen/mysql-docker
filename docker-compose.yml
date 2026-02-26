@@ -1,0 +1,47 @@
+# MySQL Docker Compose — database layer only.
+# All credentials are read from .env (never committed).
+# MySQL is bound to 127.0.0.1 on the host; it is NOT publicly reachable by default.
+#
+# Start:   docker compose up -d
+# Stop:    docker compose down
+# Logs:    docker compose logs -f mysql
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: mysql8
+    restart: unless-stopped
+
+    env_file:
+      - .env
+
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      # MYSQL_DATABASE / MYSQL_USER / MYSQL_PASSWORD are intentionally NOT set here.
+      # Use scripts/create-db.sh to provision per-project databases and users.
+
+    ports:
+      # Bound to loopback only — change to "0.0.0.0:${MYSQL_PORT:-3306}:3306"
+      # only if you have a deliberate reason to expose MySQL on the network.
+      - "127.0.0.1:${MYSQL_PORT:-3306}:3306"
+
+    volumes:
+      # Named volume keeps data safe across container rebuilds.
+      - mysql_data:/var/lib/mysql
+      # Drop-in MySQL config (read-only inside the container).
+      - ./conf/mysql/my.cnf:/etc/mysql/conf.d/custom.cnf:ro
+      # SQL/shell scripts placed here run once on first initialisation.
+      - ./init:/docker-entrypoint-initdb.d:ro
+
+    healthcheck:
+      # mysqladmin ping does not require authentication — it only tests
+      # whether the server is accepting connections.
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "--silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+volumes:
+  mysql_data:
+    driver: local

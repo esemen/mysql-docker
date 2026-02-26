@@ -1,0 +1,2 @@
+# Backup dumps land here.
+# *.sql, *.sql.gz, and *.sql.bz2 files are excluded from git via .gitignore.
