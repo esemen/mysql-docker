@@ -21,11 +21,9 @@ services:
       # Use scripts/create-db.sh to provision per-project databases and users.
 
     ports:
-      # Loopback binding — always present.
-      - "127.0.0.1:${MYSQL_PORT:-3306}:3306"
-      # Additional binding from MYSQL_BIND_IP in .env.
-      # ⚠ If this is a public IP, protect port 3306 with a firewall.
-      - "${MYSQL_BIND_IP}:${MYSQL_PORT:-3306}:3306"
+      # Defaults to loopback (127.0.0.1). Set MYSQL_BIND_IP=0.0.0.0 in .env
+      # to listen on all interfaces — protect port 3306 with a firewall in that case.
+      - "${MYSQL_BIND_IP:-127.0.0.1}:${MYSQL_PORT:-3306}:3306"
 
     volumes:
       # Named volume keeps data safe across container rebuilds.
